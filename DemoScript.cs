@@ -11,7 +11,7 @@ public class DemoScript : MonoBehaviour
     // To Add and Visualize Item 
     public void PickUpItem(Item item)
     {
-        bool result = inventoryManager.AddItem(item);
+        bool result = inventoryManager.AddItem(item, 1);
         if(result){
             Debug.Log("Item added");
         }
@@ -20,5 +20,11 @@ public class DemoScript : MonoBehaviour
             Debug.Log("Item Not added");
         }
     }
-   
+
+    public void GetItem(Item item)
+    {
+        inventoryManager.GetItemFromDic(item);
+    }
+
+
 }

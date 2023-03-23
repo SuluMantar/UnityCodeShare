@@ -11,7 +11,7 @@ public class Item : ScriptableObject
     public Sprite image;
     public ItemType type;
     public bool isStackable;
-    public string name;
+    public string nameOfItem;
 
 
     public enum ItemType
