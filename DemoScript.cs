@@ -26,5 +26,8 @@ public class DemoScript : MonoBehaviour
         inventoryManager.GetItemFromDic(item);
     }
 
-
+    public void RemoveItem(Item item)
+    {
+        inventoryManager.RemoveItemFromDic(item,1);
+    }
 }

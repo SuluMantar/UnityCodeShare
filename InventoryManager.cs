@@ -96,4 +96,62 @@ public class InventoryManager : MonoBehaviour
             itemDic.Add(item, Amount);
         }
     }
+
+    private InventoryItem GetInventoryItemByItem(Item item)
+    {
+        foreach (InventorySlots slot in inventorySlots)
+        {
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null && itemInSlot.item == item)
+            {
+                return itemInSlot;
+            }
+        }
+        return null;
+    }
+
+    public void RemoveItemFromDic(Item item, int amountToRemove)
+    {
+        InventoryItem itemInSlot = GetInventoryItemByItem(item);
+        if (item != null && itemDic.ContainsKey(item))
+        {
+            // Remove From Dictionary
+            int currentAmount = itemDic[item];
+            if (currentAmount > amountToRemove)
+            {
+                itemDic[item] -= amountToRemove;
+            }
+            else
+            {
+                itemDic.Remove(item);
+                amountToRemove = currentAmount;
+            }
+
+            // If the item has a stackable GameObject, decrease its stack size
+            // To Update Visualization
+            if (item.isStackable)
+            {
+                if (itemInSlot != null)
+                {
+                    itemInSlot.itemAmount -= amountToRemove;
+                    if (itemInSlot.itemAmount <= 0)
+                    {
+                        Destroy(itemInSlot.gameObject);
+                    }
+                    else
+                    {
+                        itemInSlot.RefreshCount();
+                    }
+                }
+            }
+            else
+            {
+                Destroy(itemInSlot.gameObject);
+
+            }
+        }
+        
+    }
+
+        
 }
