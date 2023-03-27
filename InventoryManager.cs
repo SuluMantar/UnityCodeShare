@@ -25,7 +25,7 @@ public class InventoryManager : MonoBehaviour
             InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
             if (itemInSlot != null && itemInSlot.item == item && itemInSlot.item.isStackable && itemInSlot.itemAmount < maxStackSize)
             {
-                AddItemToDic(item, amountToAdd);
+                //AddItemToDic(item, amountToAdd);
                 itemInSlot.itemAmount++;
                 itemInSlot.RefreshCount();
                 return true;
@@ -40,7 +40,8 @@ public class InventoryManager : MonoBehaviour
             if(itemInSlot == null)
             {
                 SpawnNewItem(item, slot);
-                AddItemToDic(item, amountToAdd);
+                //AddItemToDic(item, amountToAdd);
+
                 return true;
             }
             

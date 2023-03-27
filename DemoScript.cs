@@ -6,12 +6,13 @@ public class DemoScript : MonoBehaviour
 {
     public InventoryManager inventoryManager;
 
-
+    public int amountToAdd = 1;
 
     // To Add and Visualize Item 
     public void PickUpItem(Item item)
     {
-        bool result = inventoryManager.AddItem(item, 1);
+        bool result = inventoryManager.AddItem(item, amountToAdd);
+        inventoryManager.AddItemToDic(item, amountToAdd);
         if(result){
             Debug.Log("Item added");
         }
