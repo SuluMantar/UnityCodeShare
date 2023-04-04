@@ -14,11 +14,13 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public Item item;
     public int itemAmount = 1;
 
+    private InventoryManager inventory;
 
-    public void InitialiseItem(Item newItem)
+    public void InitialiseItem(Item newItem, int quantity)
     {
         item = newItem;
         image.sprite = newItem.image;
+        itemAmount = quantity;
         RefreshCount();
         Debug.Log(item.name);
     }
@@ -34,7 +36,6 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public void OnBeginDrag(PointerEventData eventdata){
 
         image.raycastTarget = false;
-
         parentAfterDrag = transform.parent;
         transform.SetParent(transform.root);
     }
@@ -52,7 +53,11 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetParent(parentAfterDrag);
     }
 
+    public int GetQuantity()
+    {
+        return itemAmount;
 
+    }
 
 
 

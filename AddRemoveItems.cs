@@ -10,6 +10,9 @@ public class AddRemoveItems : MonoBehaviour
     [SerializeField]
     private Item item;
 
+    [SerializeField]
+    private Item[] itemToAdd;
+
     // This field show that which area that we are going to put the item (Preview) 
     [SerializeField]
     private TileBase highlightTile;
@@ -27,12 +30,12 @@ public class AddRemoveItems : MonoBehaviour
     private GameObject lootPrefab;
     [SerializeField]
     InventoryManager inventory;
-
+    
 
     private void Start()
     {
-        inventory.AddItem(item, 10);
-        inventory.AddItemToDic(item,10);
+        inventory.AddItem(itemToAdd[0], 10);
+        inventory.AddItem(itemToAdd[1], 10);
     }
 
 
@@ -60,13 +63,7 @@ public class AddRemoveItems : MonoBehaviour
             }
         }
 
-
-
     }
-    
-
-
-
 
 
     private Vector3Int GetMouseOnGridPos()

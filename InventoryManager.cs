@@ -6,6 +6,10 @@ public class InventoryManager : MonoBehaviour
 {
     // Character's inventory slots
     public InventorySlots[] inventorySlots;
+    // Crafting Slots
+    public InventorySlots[] craftingSlots;
+    // Crafted Item Slot
+    public InventorySlots craftedItemSlot;
     //Item to spawn 
     public GameObject inventoryItemPrefab;
 
@@ -25,8 +29,7 @@ public class InventoryManager : MonoBehaviour
             InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
             if (itemInSlot != null && itemInSlot.item == item && itemInSlot.item.isStackable && itemInSlot.itemAmount < maxStackSize)
             {
-                //AddItemToDic(item, amountToAdd);
-                itemInSlot.itemAmount++;
+                itemInSlot.itemAmount += amountToAdd;
                 itemInSlot.RefreshCount();
                 return true;
             }
@@ -39,9 +42,7 @@ public class InventoryManager : MonoBehaviour
             InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
             if(itemInSlot == null)
             {
-                SpawnNewItem(item, slot);
-                //AddItemToDic(item, amountToAdd);
-
+                SpawnNewItem(item, slot, amountToAdd);
                 return true;
             }
             
@@ -49,16 +50,41 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
 
+    public bool IsThereItemOnOutput() 
+    {
+        InventoryItem outputItemInSlot = craftedItemSlot.GetComponentInChildren<InventoryItem>();
+        if (outputItemInSlot == null)
+        {
+            Debug.Log("Its empty");
+            return true;
+        }
+        Debug.Log("Output is full");
+        return false;
 
+    }
+
+
+
+
+    public void AddItemToOutput(Item item, int amountToAdd)
+    {
+        InventoryItem outputItemInSlot = craftedItemSlot.GetComponentInChildren<InventoryItem>();
+
+        if (outputItemInSlot == null)
+        {
+            SpawnNewItem(item, craftedItemSlot, amountToAdd);
+            Debug.Log("Added");
+        }
+    }
 
     // To Add item to slot we have to spawn item and place it in that slot 
-    void SpawnNewItem(Item item, InventorySlots slot)
+    void SpawnNewItem(Item item, InventorySlots slot, int amount)
     {
         GameObject newItemGo = Instantiate(inventoryItemPrefab, slot.transform);
         // Get the Inventoryitem Script to Do InitialiseItem Function
         //This Function just change our SpawnedItem's image and features according to our item
         InventoryItem inventoryItem = newItemGo.GetComponent<InventoryItem>();
-        inventoryItem.InitialiseItem(item);
+        inventoryItem.InitialiseItem(item,amount);
     }
 
 
@@ -153,6 +179,52 @@ public class InventoryManager : MonoBehaviour
         }
         
     }
+
+
+    private InventoryItem GetCraftingItemByItem(Item item)
+    {
+        foreach (InventorySlots slot in craftingSlots)
+        {
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null && itemInSlot.item == item)
+            {
+                return itemInSlot;
+            }
+        }
+        return null;
+    }
+
+    public void RemoveItemFromDicInCraft(Item item, int amountToRemove)
+    {
+        InventoryItem itemInSlot = GetCraftingItemByItem(item);
+
+        if (item != null && itemInSlot.itemAmount > amountToRemove)
+        {
+            itemInSlot.itemAmount -= amountToRemove;
+            itemInSlot.RefreshCount();
+        }
+        else
+        {
+            itemDic.Remove(item);
+            Destroy(itemInSlot.gameObject);
+        }
+    }
+
+
+
+    public bool Contains(Item item, int necessaryAmountToCraft)
+    {
+        foreach (InventorySlots slot in craftingSlots)
+        {
+            InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
+            if (itemInSlot != null && itemInSlot.item == item && itemInSlot.GetQuantity() >= necessaryAmountToCraft)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
         
 }

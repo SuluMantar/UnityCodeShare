@@ -21,7 +21,7 @@ public class Item : ScriptableObject
     public string nameOfItem;
     public Vector2Int range = new Vector2Int(5, 4);
     public ActionType actionType;
-
+    public int quantityToCraft;
 
 
     
