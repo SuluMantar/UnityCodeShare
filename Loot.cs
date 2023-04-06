@@ -7,7 +7,7 @@ public class Loot : MonoBehaviour
     [SerializeField]
     private SpriteRenderer sr;
     [SerializeField]
-    private BoxCollider2D collider;
+    private BoxCollider2D lootCollider;
     [SerializeField]
     private float moveSpeed;
     [SerializeField]
@@ -43,7 +43,7 @@ public class Loot : MonoBehaviour
 
     private IEnumerator MoveAndCollect(Transform target)
     {
-        Destroy(collider);
+        Destroy(lootCollider);
 
         while (transform.position != target.position)
         {

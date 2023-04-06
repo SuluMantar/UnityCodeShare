@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 public class TimeScript : MonoBehaviour
 {
-    private bool inProgress;
+    public bool inProgress;
     private DateTime TimerStart;
     private DateTime TimerEnd;
 
@@ -18,46 +18,34 @@ public class TimeScript : MonoBehaviour
     private Text timeLeftText;
 
 
-    public int Days;
-    public int Hours;
-    public int Minutes;
-    public int Seconds;
+    private int Days;
+    private int Hours;
+    private int Minutes;
+    private int Seconds;
 
     private Coroutine lastTimer;
     private Coroutine lastDisplay;
 
-
-    private void Update()
-    {
-
-        if (Input.GetKeyDown("space"))
-        {
-            StartTimer();
-        }
-
-    }
-
-
-
     // Start TimerToDisplay
-    private void InitializeTimer()
+    private void InitializeTimer(int days, int hours, int minutes, int seconds)
     {
         startTime.text = "Start Time: \n" + TimerStart;
         endTime.text = "Start Time: \n" + TimerEnd;
-        lastDisplay = StartCoroutine(DisplayTime());
+        lastDisplay = StartCoroutine(DisplayTime(days, hours, minutes, seconds));
     }
 
 
     // Calculate Time between start and end time
-    private void StartTimer()
+    public void StartTimer(int days, int hours, int minutes, int seconds)
     {
+        
         TimerStart = DateTime.Now;
-        TimeSpan time = new TimeSpan(Days, Hours, Minutes, Seconds);
+        TimeSpan time = new TimeSpan(days, hours, minutes, seconds);
         TimerEnd = TimerStart.Add(time);
         inProgress = true;
         Debug.Log(TimerStart + " " + TimerEnd);
 
-        InitializeTimer();
+        InitializeTimer(days, hours, minutes, seconds);
         lastTimer = StartCoroutine(Timer());
 
     }
@@ -71,14 +59,14 @@ public class TimeScript : MonoBehaviour
 
         inProgress = false;
 
-        Debug.Log("Finished");
+        Debug.Log("Crafting Finished");
 
     }
 
 
 
     // Set TimerText 
-    private IEnumerator DisplayTime()
+   /* private IEnumerator DisplayTime(int days, int hours, int minutes, int seconds)
     {
 
         DateTime start = DateTime.Now;
@@ -93,26 +81,26 @@ public class TimeScript : MonoBehaviour
 
             if (totalSecondsLeft > 1)
             {
-                if (timeLeft.Days != 0)
+                if (timeLeft.days != 0)
                 {
-                    text += timeLeft.Days + "d";
-                    text += timeLeft.Hours + "h";
+                    text += timeLeft.days + "d";
+                    text += timeLeft.hours + "h";
                     
                     Debug.Log("Working");
-                    yield return new WaitForSeconds(timeLeft.Minutes * 60);
+                    yield return new WaitForSeconds(timeLeft.minutes * 60);
                 }
-                else if (timeLeft.Hours != 0)
+                else if (timeLeft.hours != 0)
                 {
-                    text += timeLeft.Hours + "h";
-                    text += timeLeft.Minutes + "m";
+                    text += timeLeft.hours + "h";
+                    text += timeLeft.minutes + "m";
                     Debug.Log("Working: Hours");
-                    yield return new WaitForSeconds(timeLeft.Seconds);
+                    yield return new WaitForSeconds(timeLeft.seconds);
                 }
                 else if (timeLeft.Minutes != 0)
                 {
                     TimeSpan ts = TimeSpan.FromSeconds(totalSecondsLeft);
-                    text += ts.Minutes + "m";
-                    text += ts.Seconds + "s";
+                    text += ts.minutes + "m";
+                    text += ts.seconds + "s";
                     Debug.Log("Working: Minutes");
                 }
                 else
@@ -137,7 +125,70 @@ public class TimeScript : MonoBehaviour
 
         yield return null;
     }
+    */
+    private IEnumerator DisplayTime(int days, int hours, int minutes, int seconds)
+    {
+        this.Days = days;
+        this.Hours = hours;
+        this.Minutes = minutes;
+        this.Seconds = seconds;
 
+        DateTime start = DateTime.Now;
+        TimeSpan timeLeft = TimerEnd - start;
+        var totalSecondsLeft = timeLeft.TotalSeconds;
+        var totalSeconds = (TimerEnd - TimerStart).TotalSeconds;
+        string text;
+
+        while (inProgress)
+        {
+            text = "";
+
+            if (totalSecondsLeft > 1)
+            {
+                if (timeLeft.Days != 0)
+                {
+                    text += timeLeft.Days + "d";
+                    text += timeLeft.Hours + "h";
+
+                    Debug.Log("Working");
+                    yield return new WaitForSeconds(timeLeft.Minutes * 60);
+                }
+                else if (timeLeft.Hours != 0)
+                {
+                    text += timeLeft.Hours + "h";
+                    text += timeLeft.Minutes + "m";
+                    Debug.Log("Working: Hours");
+                    yield return new WaitForSeconds(timeLeft.Seconds);
+                }
+                else if (timeLeft.Minutes != 0) // Fixed capitalization of Minutes
+                {
+                    TimeSpan ts = TimeSpan.FromSeconds(totalSecondsLeft);
+                    text += ts.Minutes + "m"; // Fixed capitalization of Minutes
+                    text += ts.Seconds + "s";
+                    Debug.Log("Working: Minutes");
+                }
+                else
+                {
+                    text += Mathf.FloorToInt((float)totalSecondsLeft) + "s";
+                    Debug.Log("Working: Seconds");
+                }
+
+                timeLeftText.text = text;
+                totalSecondsLeft -= Time.deltaTime;
+                Debug.Log("Total seconds left: " + totalSecondsLeft);
+                yield return null;
+            }
+            else
+            {
+                timeLeftText.text = "Finished";
+                inProgress = false;
+                break;
+            }
+
+        }
+
+        yield return null;
+    }
 
     public void SkipTime()
     {

@@ -13,7 +13,7 @@ public class CraftingRecipe : ScriptableObject
     {
         for (int i = 0; i < itemsForRecipes.Length; i++)
         {
-            if (!manager.Contains(itemsForRecipes[i], itemsForRecipes[i].quantityToCraft))
+            if (!manager.Contains(itemsForRecipes[i], itemsForRecipes[i].quantityToCraft) && manager.IsThereItemOnOutput())
                 return false;
 
         }
@@ -25,19 +25,20 @@ public class CraftingRecipe : ScriptableObject
     {
         for (int i = 0; i < itemsForRecipes.Length; i++)
         {
+
             if (manager.IsThereItemOnOutput())
             {
-                manager.RemoveItemFromDicInCraft(itemsForRecipes[i], itemsForRecipes[i].quantityToCraft);
+               manager.RemoveItemFromDicInCraft(itemsForRecipes[i], itemsForRecipes[i].quantityToCraft); 
             }
-            
+
         }
 
         if (manager.IsThereItemOnOutput())
         {
             manager.AddItemToOutput(craftedItem, 1);
-            manager.AddItemToDic(craftedItem, 1);
+            manager.AddItemToDic(craftedItem, 1);  
         }
-        
+
 
     }
 

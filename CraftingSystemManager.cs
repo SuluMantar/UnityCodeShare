@@ -10,17 +10,39 @@ public class CraftingSystemManager : MonoBehaviour
     [SerializeField]
     private CraftingRecipe[] recipes;
 
+    [SerializeField]
+    private TimeScript timer;
 
-    public void Craft(CraftingRecipe recipe)
+    public int Days;
+    public int Hours;
+    public int Minutes;
+    public int Seconds;
+
+    public void Craft()
     {
-        if (recipe.CanCraft(inventory))
+        foreach (CraftingRecipe recipe in recipes)
         {
-            recipe.Craft(inventory);
+            if (recipe.CanCraft(inventory))
+            {
+                inventory.CraftingInProgress(false);
+                timer.StartTimer(Days, Hours, Minutes, Seconds);
+                StartCoroutine(WaitForCrafting(recipe));
+            }
+            else
+            {
+                Debug.Log(" You dont have enough material");
+            }
         }
-        else
+    }
+
+    IEnumerator WaitForCrafting(CraftingRecipe recipe)
+    {
+        while (timer.inProgress)
         {
-            Debug.Log(" You dont have enough material");
+            yield return null;
         }
+        inventory.CraftingInProgress(true);
+        recipe.Craft(inventory);
     }
 
 }

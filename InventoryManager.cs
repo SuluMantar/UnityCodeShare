@@ -13,8 +13,6 @@ public class InventoryManager : MonoBehaviour
     //Item to spawn 
     public GameObject inventoryItemPrefab;
 
-    private int maxStackSize = 24;
-
     Dictionary<Item, int> itemDic = new Dictionary<Item, int>();
 
 
@@ -27,7 +25,7 @@ public class InventoryManager : MonoBehaviour
         {
             InventorySlots slot = inventorySlots[i];
             InventoryItem itemInSlot = slot.GetComponentInChildren<InventoryItem>();
-            if (itemInSlot != null && itemInSlot.item == item && itemInSlot.item.isStackable && itemInSlot.itemAmount < maxStackSize)
+            if (itemInSlot != null && itemInSlot.item == item && itemInSlot.item.isStackable && itemInSlot.itemAmount < itemInSlot.item.maxStackSize)
             {
                 itemInSlot.itemAmount += amountToAdd;
                 itemInSlot.RefreshCount();
@@ -225,6 +223,15 @@ public class InventoryManager : MonoBehaviour
         return false;
     }
 
+    public void CraftingInProgress(bool progress)
+    {
+        foreach (var craftingItemSlots in craftingSlots)
+        {
+            InventoryItem itemInProgress = craftingItemSlots.GetComponentInChildren<InventoryItem>();
+            if (itemInProgress != null)
+                itemInProgress.image.raycastTarget = progress;
+        }
 
+    }
         
 }
