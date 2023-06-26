@@ -42,6 +42,7 @@ public class AbilityUser : MonoBehaviour
             if (skillDuration <= 0f)
             {
                 Debug.Log("Skill Deactivated");
+                active = false;
                 
             }
         }
