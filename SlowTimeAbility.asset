@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   abilityName: Slow Time Ability
   description: 
-  cooldown: 10
-  slowdownFactor: 0.5
+  cooldown: 5
   duration: 3
+  slowdownFactor: 0.5

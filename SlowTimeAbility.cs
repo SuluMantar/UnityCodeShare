@@ -5,7 +5,7 @@ using UnityEngine;
 public class SlowTimeAbility : AbilityBase
 {
     public float slowdownFactor = 0.5f;
-    public float duration = 3f;
+    //public float duration = 3f;
 
     public override void ActivateAbility()
     {

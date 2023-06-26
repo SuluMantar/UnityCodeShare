@@ -15,3 +15,4 @@ MonoBehaviour:
   abilityName: Shield Ability
   description: 
   cooldown: 3
+  duration: 5

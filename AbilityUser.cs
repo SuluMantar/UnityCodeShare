@@ -7,7 +7,8 @@ public class AbilityUser : MonoBehaviour
 
     public AbilityBase ability;
     private float duration;
-    private float maxDuration;
+    private float skillDuration;
+    private bool active;
 
     void Start()
     {
@@ -33,15 +34,28 @@ public class AbilityUser : MonoBehaviour
                 Debug.Log("Its in cooldown");
             }
         }
-       
 
+
+        if (active)
+        {
+            skillDuration -= Time.deltaTime;
+            if (skillDuration <= 0f)
+            {
+                Debug.Log("Skill Deactivated");
+                
+            }
+        }
     }
 
 
 
     void DoIt()
     {
-        Debug.Log("Time finished");
+        ability.ActivateAbility();
+        skillDuration = ability.duration;
+        active = true;
+
+        //Debug.Log("Time finished");
 
 
     }

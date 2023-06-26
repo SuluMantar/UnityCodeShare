@@ -7,6 +7,7 @@ public abstract class AbilityBase : ScriptableObject
     public string abilityName;
     public string description;
     public float cooldown;
+    public float duration;
 
     public abstract void ActivateAbility();
 }
